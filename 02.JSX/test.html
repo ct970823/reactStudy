@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo</title>
+</head>
+<body>
+<h3>前端JS框架列表</h3>
+<div id="example"></div>
+<script type="text/javascript" src="../js/react.development.js"></script>
+<script type="text/javascript" src="../js/react-dom.development.js"></script>
+<script type="text/javascript" src="../js/babel.min.js"></script>
+<script type="text/babel">
+    /*
+    * 功能：动态展示列表数据
+    * */
+    const names = ['jQuery','zepto','angular','react','vue']
+    // 创建虚拟DOM
+    // 必须要有一个key 且key值唯一
+    const ul = (
+        <ul>
+            {names.map((name,index)=><li key={index}>{name}</li>)}
+        </ul>
+    )
+    // 渲染DOM
+    ReactDOM.render(ul,document.getElementById('example'))
+</script>
+</body>
+</html>
