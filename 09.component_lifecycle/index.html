@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>component_from</title>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/javascript" src="../js/react.development.js"></script>
+<script type="text/javascript" src="../js/react-dom.development.js"></script>
+<!--引入prop-type库-->
+<script type="text/javascript" src="../js/prop-types.js"></script>
+<script type="text/javascript" src="../js/babel.min.js"></script>
+
+<script type="text/babel">
+    /*
+    * 自定义组件
+    * 1、让指定的文本做显示/隐藏动画
+    * 2、切换事件为2s
+    * 3、点击按钮从界面中移除组件界面
+    * */
+
+    class Life extends React.Component {
+        constructor(props) {
+            super(props);
+            //初始化状态
+            this.state = {
+                opacity:1
+            }
+            this.distroyComponent = this.distroyComponent.bind(this)
+        }
+
+        //生命周期 组件加载
+        componentDidMount(){
+            //启动循环定时器
+            //都是一个组件对象所以直接使用this.intervalId
+            this.intervalId = setInterval(function () {
+                let {opacity} = this.state
+                opacity -= 0.1
+                if(opacity <= 0){
+                    opacity = 1
+                }
+                this.setState({opacity});
+            }.bind(this),200)
+        }
+        //组件将要移除
+        componentWillUnmount(){
+            clearInterval(this.intervalId)
+        }
+
+        distroyComponent(){
+            //卸载组件
+            ReactDOM.unmountComponentAtNode(document.getElementById('example'))
+        }
+
+        // 两个大括号  第一个表示里面写js代码  第二个表示对象
+        render() {
+            const {opacity} =  this.state
+            return (
+                <div>
+                    <h2 style={{opacity}}>{this.props.msg}</h2>
+                    <button onClick={this.distroyComponent}>移除</button>
+                </div>
+            );
+        }
+    }
+    ReactDOM.render(<Life msg="react老折磨人了！"/>,document.getElementById('example'))
+</script>
+</body>
+</html>
