@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vDOM-DOM Diff</title>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/javascript" src="../js/react.development.js"></script>
+<script type="text/javascript" src="../js/react-dom.development.js"></script>
+<!--引入prop-type库-->
+<script type="text/javascript" src="../js/prop-types.js"></script>
+<script type="text/javascript" src="../js/babel.min.js"></script>
+
+<script type="text/babel">
+    /*
+    * 验证：
+    * 虚拟Dom+DOM Diff算法：最小化页面重绘
+    */
+
+    class HelloWorld extends React.Component {
+        constructor(props) {
+            super(props);
+            //初始化状态
+            this.state = {
+                date:new Date()
+            }
+        }
+
+        //生命周期 组件加载
+        componentDidMount(){
+            //启动循环定时器
+            //都是一个组件对象所以直接使用this.intervalId
+            setInterval(() => {
+                this.setState({
+                    date:new Date()
+                });
+            },1000)
+        }
+
+        // 两个大括号  第一个表示里面写js代码  第二个表示对象
+        render() {
+            return (
+                <p>
+                    Hello,<input type="text" placeholder="Your name here" />!&nbsp;
+                    <span>It is {this.state.date.toTimeString()}</span>
+                </p>
+            );
+        }
+    }
+    ReactDOM.render(<HelloWorld />,document.getElementById('example'))
+</script>
+</body>
+</html>

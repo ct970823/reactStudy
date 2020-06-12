@@ -20,6 +20,12 @@
     * 2、切换事件为2s
     * 3、点击按钮从界面中移除组件界面
     * */
+    /*
+   * render()  初始化渲染或更新渲染调用
+   * componentDidMount() 开启监听，发送ajax请求
+   * componentWillUnmount() 做一些收尾工作，如清除定时器
+   * componentWillReceiveProps()
+   * */
 
     class Life extends React.Component {
         constructor(props) {
@@ -29,6 +35,11 @@
                 opacity:1
             }
             this.distroyComponent = this.distroyComponent.bind(this)
+        }
+
+        //组件将加载
+        componentWillMount () {
+            console.log('componentWilMount()')
         }
 
         //生命周期 组件加载
@@ -44,6 +55,15 @@
                 this.setState({opacity});
             }.bind(this),200)
         }
+        //组件将更新
+        componentWillUpdate (){
+            console.log('componentWillUpdate()')
+        }
+        //组件更新
+        componentDidUpdate () {
+            console.log('componentDidUpdate()')
+        }
+
         //组件将要移除
         componentWillUnmount(){
             clearInterval(this.intervalId)
