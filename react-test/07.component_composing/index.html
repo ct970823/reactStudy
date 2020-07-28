@@ -15,7 +15,7 @@
 
 <script type="text/babel">
     /*
-    *问题：数据保存在哪个组件内？ App
+    *问题：数据保存在哪个组件内？ Counter
     *   看组件是某个组件需要（给自己）还是某些组件需要（共同父组件）
     * 问题2：子组件中改变父组件状态
     *       子组件中不能直接改变父组件状态
@@ -29,7 +29,7 @@
     *       2>实现交互功能
     * */
     // 1.定义组件
-    class App extends React.Component {
+    class Counter extends React.Component {
         constructor (props) {
             super(props)
             // 初始化状态
@@ -106,7 +106,7 @@
     }
 
     // 渲染应用组件标签
-    ReactDOM.render(<App />, document.getElementById('example'))
+    ReactDOM.render(<Counter />, document.getElementById('example'))
 
 </script>
 </body>

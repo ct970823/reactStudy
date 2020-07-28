@@ -1,17 +1,17 @@
 import React from 'react';
 import logo from './logo.svg';
-import './App.css';
+import './Counter.css';
 
-function App() {
+function Counter() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+    <div className="Counter">
+      <header className="Counter-header">
+        <img src={logo} className="Counter-logo" alt="logo" />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Edit <code>src/Counter.js</code> and save to reload.
         </p>
         <a
-          className="App-link"
+          className="Counter-link"
           href="https://reactjs.org"
           target="_blank"
           rel="noopener noreferrer"
@@ -23,4 +23,4 @@ function App() {
   );
 }
 
-export default App;
+export default Counter;
