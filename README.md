@@ -211,16 +211,167 @@ PubSub.subscribe('search', (msg,searchName) => {
     2. 新建四个文件夹
     ![](https://images.gitee.com/uploads/images/2020/0808/153915_c8c0ad97_1133983.png "TIM截图20200808153900.png")
     - store.js
-
-
-
-
-
-
-    
-    
-    
-    
-    
+    ```
+        /*
+        * redux 核心管理模块
+        * */
+        import {applyMiddleware, createStore} from "redux";
+        //异步
+        import thunk from "redux-thunk";
+        //开发插件
+        import {composeWithDevTools} from "redux-devtools-extension";
+        import reducers from "./reducers";
+        export default createStore(reducers,composeWithDevTools(applyMiddleware(thunk)))
+    ```
+    - reducers.js
+    ```
+        /*
+        * 包含n个reducer函数，根据老的返回新的
+        * */
+        //通过combineReducers来拆分reducer
+        import {combineReducers} from 'redux'
+        import {
+            AUTH_SUCCESS,
+            ERROR_MSG,
+            RESET_USER,
+            RECEIVE_USER,
+            RECEIVE_USER_LIST,
+            RECEIVE_MSG,
+            RECEIVE_MSG_LIST,
+            MSG_READ
+        } from './action-type'
+        import {getRedirectTo} from "../utils";
         
+        const initUser = {
+            username:'',//用户名
+            type:'',//用户类型dashen/laoban
+            msg:'',//错误提示信息
+            redirectTo:''//需要自动重定向的路由路径
+        }
+        //产生user状态的reducer
+        function user(state=initUser,action) {
+            switch (action.type) {
+                case AUTH_SUCCESS://data是user  action.data
+                    const {type,header} = action.data
+                    return {...action.data,redirectTo: getRedirectTo(type,header)}
+                case ERROR_MSG://data是msg
+                    return {...state,msg:action.data}
+                case RECEIVE_USER://data是msg
+                    return action.data
+                case RESET_USER://data是msg
+                    return {...initUser,msg:action.data}
+                default:
+                    return state
+            }
+        }
+        export default combineReducers({
+            user,
+        })
+    ```
+    - action-type.js
+    ```
+        /*
+        * 包含n个action名称
+        * */
+        export const AUTH_SUCCESS = 'auth_success'//注册/登录成功
+    ```
+    - action.js
+    ```
+        /*
+        * 包含n个action
+        * */
+        import {
+            AUTH_SUCCESS,
+            ERROR_MSG,
+            RECEIVE_USER,
+            RESET_USER,
+            RECEIVE_USER_LIST,
+            RECEIVE_MSG_LIST,
+            RECEIVE_MSG,
+            MSG_READ
+        } from './action-type'
+        //引入api
+        import {
+            reqRegister,
+            reqLogin,
+            reqUpdateUser,
+            reqUser,
+            reqUserList,
+            reqChatMsgList,
+            reqReadMsg
+        } from '../api'
         
+        //授权成功的同步action
+        const authSuccess = (user) => ({type: AUTH_SUCCESS, data: user})
+        //错误提示信息的同步action
+        const errorMsg = (msg) => ({type: ERROR_MSG, data: msg})
+        //注册异步action
+        export const register = (user) => {
+            const {username, password, password2, type} = user
+            //表单验证
+            if (!username) {
+                return errorMsg('用户名不能为空')
+            }
+            if (!password) {
+                return errorMsg('密码不能为空')
+            }
+            if (!password2) {
+                return errorMsg('确认密码不能为空')
+            }
+            if (password !== password2) {
+                return errorMsg('两次密码要一致')
+            }
+            return async dispatch => {
+                //发送注册的异步ajax请求
+                const response = await reqRegister({username, password, type})
+                const result = response.data
+                if (result.code === 0) {
+                    // 分发成功的同步action
+                    await getMsgList(dispatch,result.data._id)
+                    dispatch(authSuccess(result.data))
+                } else {
+                    // 分发错误提示信息的同步action
+                    dispatch(errorMsg(result.msg))
+                }
+            }
+        }
+
+    ```
+### 路由
+1. 下载包和引入包
+
+```
+npm install --save 'react-router-dom'
+import {HashRouter,Switch,Route} from 'react-router-dom'
+```
+2. 使用
+
+```
+/*
+HashRouter:hashHistory 使用 URL 中的 hash（#）部分去创建路由 简单来说就是url地址中会出现#,例如http://xxxx.com/#/
+Switch：表示只显示一个路由组件
+Route：参数path和component path为路由地址 component为组件名
+*/
+<HashRouter>
+    <Switch>
+        <Route path="/register" component={Register}/>
+        <Route path="/login" component={Login}/>
+        {/*默认路由*/}
+        <Route component={Main} />
+    </Switch>
+</HashRouter>
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
