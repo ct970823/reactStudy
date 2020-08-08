@@ -206,11 +206,11 @@ PubSub.subscribe('search', (msg,searchName) => {
 })
 ```
 3. redux
-1>npm 下载redux包和开发插件 redux-devtools-extension
-npm install --save redux redux-devtools-extension
-2>新建四个文件夹
-![](https://images.gitee.com/uploads/images/2020/0808/153915_c8c0ad97_1133983.png "TIM截图20200808153900.png")
-- store.js
+    1. npm 下载redux包和开发插件 redux-devtools-extension
+    npm install --save redux redux-devtools-extension
+    2. 新建四个文件夹
+    ![](https://images.gitee.com/uploads/images/2020/0808/153915_c8c0ad97_1133983.png "TIM截图20200808153900.png")
+    - store.js
 
 
 
