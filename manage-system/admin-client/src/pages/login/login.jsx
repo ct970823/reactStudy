@@ -1,14 +1,17 @@
 import React from 'react'
+import {Redirect} from 'react-router-dom'
 import {
     Form,
     Button,
     Input,
+    message
 } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import './login.less'
 import logo from '../../assets/images/logo.png'
 import {login} from "../../api";
-
+import memoryUtils from "../../utils/memoryUtils";
+import storageUtils from "../../utils/storageUtils";
 /*
 * 登录的路由组件
 * */
@@ -20,12 +23,29 @@ class Login extends React.Component {
     //校验成功回调
     onFinish = ({username,password}) => {
         console.log(username,password)
-        login(username,password).then(res=>{
-
+        login(username,password).then(res => {
+            console.log(res)
+            if (res.status===0) {
+                // 登录成功
+                message.success('登录成功')
+                // 保存user
+                memoryUtils.user = res.data
+                storageUtils.saveUser(res.data)
+                // 跳转到管理界面
+                this.props.history.replace('/')
+            }else{
+                // 登录失败
+                message.error(res.msg)
+            }
         })
     }
 
     render() {
+        //如果用户已经登录，自动跳转到登录界面
+        const user = memoryUtils.user
+        if (user && user._id) {
+            return <Redirect to='/'/>
+        }
         return (
             <div className='login'>
                 <header className='login-header'>
