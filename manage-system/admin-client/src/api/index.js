@@ -9,6 +9,15 @@ const BASE = ''
 export const login = (username,password) => ajax(BASE + '/login',{username,password},'POST')
 //添加用户
 export const reqAddUser = (user) => ajax(BASE + '/manage/user/add',user,'POST')
+//获取一级/二级分类列表
+export const reqCategory = (parentId) => ajax(BASE + '/manage/category/list',{parentId})
+//添加分类
+export const reqAddCategory = (parentId,categoryName) => ajax(BASE + '/manage/category/add',{parentId,categoryName},'POST')
+// 修改分类
+export const reqUpdateCategory = (categoryId,categoryName) => ajax(BASE + '/manage/category/update',{categoryId,categoryName},'POST')
+
+
+
 // jsonp请求的天气信息
 export const reqWeather = (city) => {
     return new Promise((resolve, reject) => {
