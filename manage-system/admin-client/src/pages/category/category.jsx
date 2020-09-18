@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {Card, Table, Button, Space, message, Modal} from 'antd'
 import {PlusOutlined, ArrowRightOutlined} from '@ant-design/icons'
+import AddForm from "./add-form";
+import UpdateForm from './update-form';
 import {reqCategory, reqAddCategory, reqUpdateCategory} from "../../api";
 import LinkButton from '../../components/link-button/link-button'
 /*
@@ -18,7 +20,7 @@ export default class Category extends Component {
         loading: false,//是否加载中
         parentId: '0',//当前需要显示的分类列表的父分类id
         parentName: '',//当前需要显示的分类列表的父分类名称
-        showStatus:0//
+        showStatus:0//新增/修改弹窗显示、隐藏标识 0：隐藏 1：新增显示 2：修改显示
     }
 
     // 初始化table表头
@@ -40,7 +42,7 @@ export default class Category extends Component {
                     * index：行索引
                     * */
                     <Space size="middle">
-                        <LinkButton>修改分类</LinkButton>
+                        <LinkButton onClick={()=>this.showUpdate(text)}>修改分类</LinkButton>
                         {
                             this.state.parentId === '0' ?
                                 <LinkButton onClick={() => this.showSubCategory(text)}>查看子分类</LinkButton> : null
@@ -66,10 +68,10 @@ export default class Category extends Component {
     }
 
     //获取一级/二级列表
-    getCategory = async () => {
+    getCategory = async (parentId) => {
         //显示loading
         this.setState({loading: true})
-        const {parentId} = this.state
+        parentId = parentId || this.state.parentId
         //获取数据
         const res = await reqCategory(parentId)
         console.log(res)
@@ -101,6 +103,96 @@ export default class Category extends Component {
         })
     }
 
+    // 关闭弹窗
+    handleCancel = () => {
+        const form = this.form.current
+        // 清除输入数据
+        form.resetFields()
+        this.setState({
+            showStatus:0
+        })
+    }
+
+    //显示添加的确认框
+    showAdd = () => {
+        this.setState({
+            showStatus:1
+        })
+    }
+
+    //添加分类
+    addCategory = async () => {
+        // 获取form实体
+        const form = this.form.current
+        console.log(form)
+        //表单验证
+        try{
+            const values = await form.validateFields()
+            // 隐藏确认框
+            this.setState({
+                showStatus:0
+            })
+            // 收集数据
+
+            // const {parentId,categoryName} = form.getFieldsValue()
+            const {parentId,categoryName} = values
+            form.resetFields()
+            // 提交请求
+            const result = await reqAddCategory(parentId,categoryName)
+            if(result.status===0){
+                if(parentId===this.state.parentId){
+                    // 重新显示列表
+                    this.getCategory()
+                }else if(parentId==='0'){
+                    // 在二级分类列表下添加一级分类，需重新获取一级分类列表，单不需要显示一级列表
+                    this.getCategory('0')
+
+                }
+            }
+        }catch(e){
+
+        }
+    }
+
+    // 显示修改的确认框
+    showUpdate = (category) => {
+        //保存分类对象
+        this.currentCategory = category
+        this.setState({
+            showStatus:2
+        })
+    }
+
+    //更新分类
+    updateCategory = async () => {
+        // 表单验证
+        const form = this.form.current
+        const values = await form.validateFields()
+        try{
+            // 隐藏确认框、
+            this.setState({
+                showStatus:0
+            })
+
+            // 准备数据
+            const categoryId = this.currentCategory._id
+            // const {categoryName} = form.getFieldsValue('categoryName')
+            const {categoryName} = values
+            // 清除输入数据
+            form.resetFields()
+            // 发请求更新分类
+            const result = await reqUpdateCategory({categoryId,categoryName})
+            if(result.status === 0){
+                // 重新显示列表
+                this.getCategory()
+            }
+        }catch(e){
+
+        }
+
+
+    }
+
     componentDidMount() {
         //获取一级列表
         this.getCategory()
@@ -110,6 +202,7 @@ export default class Category extends Component {
     render() {
         // 数据
         const {category, subCategory, parentId, parentName, loading} = this.state
+        const currentCategory = this.currentCategory || {}
         //左侧标题
         const title = parentId === '0' ? '一级分类列表' : (
             <span>
@@ -120,7 +213,7 @@ export default class Category extends Component {
         )
         //右侧按钮
         const extra = (
-            <Button type='primary' icon={<PlusOutlined/>}>
+            <Button type='primary' icon={<PlusOutlined/>} onClick={this.showAdd}>
                 添加
             </Button>
         )
@@ -137,23 +230,26 @@ export default class Category extends Component {
                 />
                 <Modal
                     title="添加分类"
-                    visible={this.state.visible}
-                    onOk={this.handleOk}
+                    visible={this.state.showStatus===1}
+                    onOk={this.addCategory}
                     onCancel={this.handleCancel}
                 >
-                    <p>Some contents...</p>
-                    <p>Some contents...</p>
-                    <p>Some contents...</p>
+                    <AddForm
+                        category={category}
+                        parentId={parentId}
+                        setForm={(form)=>this.form=form}
+                    />
                 </Modal>
                 <Modal
                     title="修改分类"
-                    visible={this.state.visible}
-                    onOk={this.handleOk}
+                    visible={this.state.showStatus===2}
+                    onOk={this.updateCategory}
                     onCancel={this.handleCancel}
                 >
-                    <p>Some contents...</p>
-                    <p>Some contents...</p>
-                    <p>Some contents...</p>
+                    <UpdateForm
+                        categoryName={currentCategory.name || ''}
+                        setForm={(form)=>this.form=form}
+                    />
                 </Modal>
             </Card>
 

@@ -468,6 +468,31 @@ ReactDOM.render(<DatePicker />, mountNode);
 					],
 				};
 			```
+			
+			
+			
+4. 3x迁移4x
+	1. 表单中，向父组件暴露form表单对象的方法（不看迁移的后果！！！！）
+		- 3x
+			```
+				使用Form.create()创建上下文 eg：export default Form.create()(组件名)
+				使用this.props.form就能获取到表单组件
+				父组件上setForm={(form)=>this.form=form}
+				组件初始化时调用this.props.setForm(this.props.form)
+				这样在父组件中就可以使用this.form来使用form的属性和方法了
+			```
+		- 4x
+			```
+				与3x不同，4x废弃了Form.create()，这样就不能直接使用this.props.form了，
+				但是可以使用在组件上使用ref
+					eg:<Form ref={this.formRef}></Form>
+				使用React.createRef()来获取form的实体
+					formRef = React.createRef();
+				后面操作与3x类似只是this.props.form换成了this.formRef
+			```
+
+
+
 ### 高阶函数和高阶组件
 	- 高阶函数
 		1. 一类特别的函数
