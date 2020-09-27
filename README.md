@@ -472,7 +472,7 @@ ReactDOM.render(<DatePicker />, mountNode);
 			
 			
 4. 3x迁移4x
-	1. 表单中，向父组件暴露form表单对象的方法（不看迁移的后果！！！！）
+	1. 表单中，向父组件暴露form表单对象的方法（不看官方文档。。不看迁移的后果！！！！）
 		- 3x
 			```
 				使用Form.create()创建上下文 eg：export default Form.create()(组件名)

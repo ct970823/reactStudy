@@ -1,20 +1,15 @@
 import React, {Component} from 'react';
 import {Link,withRouter} from 'react-router-dom'
 import { Menu } from 'antd';
-// import {
-//     AppstoreOutlined,
-//     // MenuUnfoldOutlined,
-//     // MenuFoldOutlined,
-//     PieChartOutlined,
-//     DesktopOutlined,
-//     ContainerOutlined,
-//     MailOutlined,
-// } from '@ant-design/icons';
 import menuList from '../../config/menuConfig'
 import './index.less'
 import logo from '../../assets/images/logo.png'
 const { SubMenu } = Menu
 class LeftNav extends Component {
+    constructor(props) {
+        super(props);
+        this.menuNodes = this.getMenuNodes(menuList)
+    }
 
     /*
     * 根据menu的数据数组生成对应的标签数组
@@ -79,7 +74,7 @@ class LeftNav extends Component {
                 //得到当前请求的路由路径
                 const path = this.props.location.pathname
                 // 查找一个与当前请求路径匹配的子Item
-                const cItem = item.children.find(cItem=>cItem.key===path)
+                const cItem = item.children.find(cItem=>path.indexOf(cItem.key)===0)
                 // 如果存在，说明当前item的字列表需要打开
                 if(cItem){
                     this.openkey = item.key
@@ -98,13 +93,12 @@ class LeftNav extends Component {
         },[])
     }
 
-    componentWillMount() {
-        this.menuNodes = this.getMenuNodes(menuList)
-    }
-
     render() {
         //得到当前请求的路由路径
-        const path = this.props.location.pathname
+        let path = this.props.location.pathname
+        if(path.indexOf('/product')===0){
+            path = '/product'
+        }
         // 得到需要打开的菜单项的key
         const openKey = this.openkey
         console.log(openKey)
