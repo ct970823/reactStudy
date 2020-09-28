@@ -372,7 +372,7 @@ Route：参数path和component path为路由地址 component为组件名
 </HashRouter>
 ```
 
-#### setState
+### setState
 	- 写法  setState(stateChange,[callback])
 		1. 函数：this.setState(state => ({count:state.count + 1})
 		2. 对象：this.setState({count:this.state.count + 1})
@@ -385,7 +385,7 @@ Route：参数path和component path为路由地址 component为组件名
 		1. 对象方式：合并更新一次状态，只调用一次render()更新界面 ---状态更新和界面更新都合并了
 		2. 函数方式：更新多次状态，但只调用一次render()更新界面 ---状态更新没有合并，但界面更新合并了
 
-#### Component
+### Component
 	- 存在的问题：
 		1. 父组件重新render(),当前组件也会重新执行render()，即使没有任何变化
 		2. 当前组件setState()，重新执行r ender(),即使state没有任何变化
