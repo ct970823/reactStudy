@@ -48,6 +48,12 @@ class UpdateForm extends React.Component {
     // 获取当前选中的菜单
     getMenus = () => this.state.checkedKeys
 
+    // 根据新传入的role来更新checkedKeys状态
+    componentWillReceiveProps(nextProps, nextContext) {
+        const menus = nextProps.role.menus
+        this.setState({checkedKeys:menus})
+    }
+
     render() {
         const {role} = this.props
         const {checkedKeys} = this.state

@@ -3,6 +3,8 @@ import {Card, Button, Table, Modal, message} from "antd";
 import {reqRoles,reqAddRole,reqUpdateRole} from "../../api";
 import AddForm from "../role/add-form";
 import UpdateForm from "./update-form";
+import memoryUtils from "../../utils/memoryUtils";
+import {formatDate} from "../../utils/dateUtils";
 /*
 * 角色路由
 * */
@@ -33,12 +35,14 @@ export default class Role extends Component {
             {
                 title: '创建时间',
                 dataIndex: 'create_time',
-                key: 'create_time'
+                key: 'create_time',
+                render:formatDate
             },
             {
                 title: '授权时间',
                 dataIndex: 'auth_time',
-                key: 'auth_time'
+                key: 'auth_time',
+                render:formatDate
             },
             {
                 title: '授权人',
@@ -92,6 +96,8 @@ export default class Role extends Component {
         const role = this.state.role
         // 得到最新的menus
         role.menus = this.auth.current.getMenus()
+        role.auth_time = Date.now()
+        role.auth_name = memoryUtils.user.username
         const result = await reqUpdateRole(role)
         if(result.status === 0){
             message.success('更新角色成功')
