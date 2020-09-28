@@ -348,27 +348,27 @@ PubSub.subscribe('search', (msg,searchName) => {
 			)('当前组件名')
 		```
 ### 路由
-1. 下载包和引入包
-	```
-	npm install --save 'react-router-dom'
-	import {HashRouter,Switch,Route} from 'react-router-dom'
-	```
-2. 使用
-	```
-	/*
-	HashRouter:hashHistory 使用 URL 中的 hash（#）部分去创建路由 简单来说就是url地址中会出现#,例如http://xxxx.com/#/
-	Switch：表示只显示一个路由组件
-	Route：参数path和component path为路由地址 component为组件名
-	*/
-	<HashRouter>
-		<Switch>
-			<Route path="/register" component={Register}/>
-			<Route path="/login" component={Login}/>
-			{/*默认路由*/}
-			<Route component={Main} />
-		</Switch>
-	</HashRouter>
-	```
+	1. 下载包和引入包
+		```
+		npm install --save 'react-router-dom'
+		import {HashRouter,Switch,Route} from 'react-router-dom'
+		```
+	2. 使用
+		```
+		/*
+		HashRouter:hashHistory 使用 URL 中的 hash（#）部分去创建路由 简单来说就是url地址中会出现#,例如http://xxxx.com/#/
+		Switch：表示只显示一个路由组件
+		Route：参数path和component path为路由地址 component为组件名
+		*/
+		<HashRouter>
+			<Switch>
+				<Route path="/register" component={Register}/>
+				<Route path="/login" component={Login}/>
+				{/*默认路由*/}
+				<Route component={Main} />
+			</Switch>
+		</HashRouter>
+		```
 
 ### setState
 	- 写法  setState(stateChange,[callback])
