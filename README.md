@@ -349,28 +349,26 @@ PubSub.subscribe('search', (msg,searchName) => {
 		```
 ### 路由
 1. 下载包和引入包
-
-```
-npm install --save 'react-router-dom'
-import {HashRouter,Switch,Route} from 'react-router-dom'
-```
+	```
+	npm install --save 'react-router-dom'
+	import {HashRouter,Switch,Route} from 'react-router-dom'
+	```
 2. 使用
-
-```
-/*
-HashRouter:hashHistory 使用 URL 中的 hash（#）部分去创建路由 简单来说就是url地址中会出现#,例如http://xxxx.com/#/
-Switch：表示只显示一个路由组件
-Route：参数path和component path为路由地址 component为组件名
-*/
-<HashRouter>
-    <Switch>
-        <Route path="/register" component={Register}/>
-        <Route path="/login" component={Login}/>
-        {/*默认路由*/}
-        <Route component={Main} />
-    </Switch>
-</HashRouter>
-```
+	```
+	/*
+	HashRouter:hashHistory 使用 URL 中的 hash（#）部分去创建路由 简单来说就是url地址中会出现#,例如http://xxxx.com/#/
+	Switch：表示只显示一个路由组件
+	Route：参数path和component path为路由地址 component为组件名
+	*/
+	<HashRouter>
+		<Switch>
+			<Route path="/register" component={Register}/>
+			<Route path="/login" component={Login}/>
+			{/*默认路由*/}
+			<Route component={Main} />
+		</Switch>
+	</HashRouter>
+	```
 
 ### setState
 	- 写法  setState(stateChange,[callback])
@@ -401,18 +399,18 @@ Route：参数path和component path为路由地址 component为组件名
 
 ### antd
 1. 下载包
-```
-//npm
-npm install antd --save
-//yarn
-yarn add antd
-```
+	```
+	//npm
+	npm install antd --save
+	//yarn
+	yarn add antd
+	```
 2. 引入
-```
-import { DatePicker } from 'antd';
+	```
+	import { DatePicker } from 'antd';
 
-ReactDOM.render(<DatePicker />, mountNode);
-```
+	ReactDOM.render(<DatePicker />, mountNode);
+	```
 3. 按需加载和自定义主题
 	- 方法一	
 
