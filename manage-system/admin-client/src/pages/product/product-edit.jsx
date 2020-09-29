@@ -5,6 +5,7 @@ import LinkButton from "../../components/link-button/link-button";
 import PicturesWall from "./pictures-wall";
 import RichTextEditor from "./rich-text-editor";
 import {reqCategory,reqAddOrUpdateProduct} from "../../api";
+import memoryUtils from "../../utils/memoryUtils";
 
 const {Item} = Form
 const {TextArea} = Input
@@ -24,10 +25,10 @@ class ProductEdit extends React.Component {
         // 获取富文本组件的实体
         this.richTextRef = React.createRef()
         // 取出携带的state
-        const product = props.location.state
+        const product = memoryUtils.product
         console.log(product)
         //保存一个是否是更新的标识
-        this.isUpdate = !!product
+        this.isUpdate = !!product._id
 
         // 保存商品（如果没有为{}）
         this.product = product || {}
@@ -148,6 +149,9 @@ class ProductEdit extends React.Component {
 
     componentDidMount() {
         this.getCategory(0)
+    }
+    componentWillUnmount() {
+        memoryUtils.product = {}
     }
 
     render() {

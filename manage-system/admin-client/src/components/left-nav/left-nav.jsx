@@ -1,9 +1,12 @@
 import React, {Component} from 'react';
 import {Link,withRouter} from 'react-router-dom'
+import {connect} from 'react-redux'
 import { Menu } from 'antd';
 import menuList from '../../config/menuConfig'
 import './index.less'
 import logo from '../../assets/images/logo.png'
+import {setHeadTitle} from "../../redux/actions";
+
 const { SubMenu } = Menu
 class LeftNav extends Component {
     constructor(props) {
@@ -58,39 +61,59 @@ class LeftNav extends Component {
         *       - SubMenu中可能存在Menu.Item，所有，递归遍历
         * */
     getMenuNodes = (menuList) => {
-
+        //得到当前请求的路由路径
+        const path = this.props.location.pathname
         return menuList.reduce((pre,item) => {
-            if(!item.children){
-                // 向pre添加<Menu.Item>
-                pre.push((
-                    <Menu.Item key={item.key} icon={item.icon}>
-                        <Link to={item.key}>
-                            {item.title}
-                        </Link>
-                    </Menu.Item>
-                ))
-            }else{
-                // 向pre添加<SubMenu>
-                //得到当前请求的路由路径
-                const path = this.props.location.pathname
-                // 查找一个与当前请求路径匹配的子Item
-                const cItem = item.children.find(cItem=>path.indexOf(cItem.key)===0)
-                // 如果存在，说明当前item的字列表需要打开
-                if(cItem){
-                    this.openkey = item.key
+            // 如果当前用户有item权限，显示对应的菜单项
+            if(this.hasAuth(item)){
+                if(!item.children){
+                    //当前显示的item
+                    if(item.key===path || path.indexOf(item.key)===0){
+                        this.props.setHeadTitle(item.title)
+                    }
+                    // 向pre添加<Menu.Item>
+                    pre.push((
+                        <Menu.Item key={item.key} icon={item.icon}>
+                            <Link to={item.key} onClick={()=>this.props.setHeadTitle(item.title)}>
+                                {item.title}
+                            </Link>
+                        </Menu.Item>
+                    ))
+                }else{
+                    // 向pre添加<SubMenu>
+                    // 查找一个与当前请求路径匹配的子Item
+                    const cItem = item.children.find(cItem=>path.indexOf(cItem.key)===0)
+                    // 如果存在，说明当前item的字列表需要打开
+                    if(cItem){
+                        this.openkey = item.key
+                    }
+                    pre.push((
+                        <SubMenu key={item.key} icon={item.icon} title={item.title}>
+                            {
+                                // 递归调用
+                                this.getMenuNodes(item.children)
+                            }
+                        </SubMenu>
+                    ))
                 }
-                pre.push((
-                    <SubMenu key={item.key} icon={item.icon} title={item.title}>
-                        {
-                            // 递归调用
-                            this.getMenuNodes(item.children)
-                        }
-                    </SubMenu>
-                ))
             }
+
             //一定要返回pre
             return pre
         },[])
+    }
+
+    // 判断当前登录用户对item是否有权限
+    hasAuth = (item) =>{
+        const {key,isPublic} = item
+        const menus = this.props.user.role.menus
+        const username = this.props.user.username
+        if(username === 'admin' || isPublic || menus.indexOf(key) !== -1){
+            return true
+        }else if(item.children){
+            return !!item.children.find(child=>menus.indexOf(child.key) !== -1)
+        }
+        return false
     }
 
     render() {
@@ -129,4 +152,7 @@ class LeftNav extends Component {
 * 包装非路由组件，返回一个新组件
 * 新的组件向非路由组件传递3个属性：history/Location/match
 * */
-export default withRouter(LeftNav)
+export default connect(
+    state=>({headTitle:state.headTitle,user:state.user}),
+    {setHeadTitle}
+)(withRouter(LeftNav))

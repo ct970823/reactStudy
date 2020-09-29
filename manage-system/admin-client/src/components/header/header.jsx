@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom'
+import {connect} from 'react-redux'
 import {Modal} from "antd";
 import {ExclamationCircleOutlined} from '@ant-design/icons'
 // import {reqWeather} from "../../api";
 import {formatDate} from '../../utils/dateUtils';
-import memoryUtils from "../../utils/memoryUtils";
-import storageUtils from "../../utils/storageUtils";
-import menuList from "../../config/menuConfig";
 import LinkButton from "../link-button/link-button";
+import {logout} from '../../redux/actions'
 import './index.less'
 class Header extends Component {
 
@@ -31,22 +30,6 @@ class Header extends Component {
     //     this.setState({dayPictureUrl,weather})
     // }
 
-    // 获取当前标题
-    getTitle = () => {
-        const path = this.props.location.pathname
-        let title
-        menuList.forEach(item=>{
-            if(item.key === path){
-                title = item.title
-            }else if(item.children){
-                const cItem = item.children.find(cItem=>path.indexOf(cItem.key)===0)
-                if(cItem){
-                    title = cItem.title
-                }
-            }
-        })
-        return title
-    }
 
     logout = ()=> {
         Modal.confirm({
@@ -55,8 +38,7 @@ class Header extends Component {
             content: '确认退出吗？',
             onOk:() => {
                 // 删除保存的user数据
-                storageUtils.removeUser()
-                memoryUtils.user = {}
+                this.props.logout()
                 // 跳转到login
                 this.props.history.replace('/login')
             }
@@ -84,8 +66,9 @@ class Header extends Component {
     render() {
         //,dayPictureUrl,weather
         const {currentTime} = this.state
-        const username = memoryUtils.user.username
-        const title = this.getTitle()
+        const username = this.props.user.username
+        // const title = this.getTitle()
+        const title = this.props.headTitle
         return (
             <div className='header'>
                 <div className='header-top'>
@@ -106,4 +89,7 @@ class Header extends Component {
         )
     }
 }
-export default withRouter(Header)
+export default connect(
+    state=>({headTitle:state.headTitle,user:state.user}),
+    {logout}
+)(withRouter(Header))

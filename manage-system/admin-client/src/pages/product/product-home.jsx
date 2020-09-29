@@ -3,6 +3,7 @@ import {Card, Select, Input, Button, Table, Space,message} from "antd";
 import {PlusOutlined} from '@ant-design/icons'
 import LinkButton from "../../components/link-button/link-button";
 import {reqProducts,reqSearchProducts,reqUpdateProductStatus} from '../../api/index'
+import memoryUtils from "../../utils/memoryUtils";
 const Option = Select.Option
 /*
 * product的主页面子路由组件
@@ -58,12 +59,26 @@ class ProductHome extends React.Component {
                     * */
                     <Space size="middle">
                         <LinkButton onClick={()=>this.updateStatus(product._id,product.status)}>{product.status===1?'下架':'上架'}</LinkButton>
-                        <LinkButton onClick={()=>this.props.history.push('/product/detail',product)}>详情</LinkButton>
-                        <LinkButton onClick={()=>this.props.history.push('/product/edit',product)}>修改</LinkButton>
+                        <LinkButton onClick={()=>this.showDetail(product)}>详情</LinkButton>
+                        <LinkButton onClick={()=>this.showUpdate(product)}>修改</LinkButton>
                     </Space>
                 )
             }
         ]
+    }
+
+
+    // 详情
+    showDetail = (product) => {
+        //缓存product对象
+        memoryUtils.product = product
+        this.props.history.push('/product/detail')
+    }
+    //修改
+    showUpdate = (product) => {
+        //缓存product对象
+        memoryUtils.product = product
+        this.props.history.push('/product/edit')
     }
 
     //获取列表数据
@@ -106,6 +121,7 @@ class ProductHome extends React.Component {
         this.getProducts(1)
     }
 
+
     render() {
         const {products,pageSize,total,loading,searchType,searchName} = this.state
         const title = (
@@ -146,6 +162,7 @@ class ProductHome extends React.Component {
                         defaultPageSize:pageSize,
                         showQuickJumper:true,
                         total,
+                        current:this.pageNum,
                         onChange:this.getProducts
                     }}
                 />

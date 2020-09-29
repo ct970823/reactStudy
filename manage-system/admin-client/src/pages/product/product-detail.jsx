@@ -5,6 +5,7 @@ import {ArrowLeftOutlined} from "@ant-design/icons";
 import './product.less'
 import {BASE_IMG_URL} from '../../utils/constants'
 import {reqCategoryById} from '../../api/index'
+import memoryUtils from "../../utils/memoryUtils";
 const Item = List.Item
 /*
 * product的详情子路由组件
@@ -19,7 +20,7 @@ class ProductDetail extends React.Component {
     }
 
     async componentDidMount() {
-        const {pCategoryId,categoryId} = this.props.location.state
+        const {pCategoryId,categoryId} = memoryUtils.product
         if(pCategoryId === '0'){
             // 一级分类下的商品
             const result = await reqCategoryById(categoryId)
@@ -45,9 +46,12 @@ class ProductDetail extends React.Component {
             this.setState({cName1,cName2})
         }
     }
+    componentWillUnmount() {
+        memoryUtils.product = {}
+    }
 
     render() {
-        const {name,desc,price,detail,imgs} = this.props.location.state
+        const {name,desc,price,detail,imgs} = memoryUtils.product
         const {cName1,cName2} = this.state
         const title = (
             <span>

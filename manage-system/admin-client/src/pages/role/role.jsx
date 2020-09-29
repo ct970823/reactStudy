@@ -3,12 +3,14 @@ import {Card, Button, Table, Modal, message} from "antd";
 import {reqRoles,reqAddRole,reqUpdateRole} from "../../api";
 import AddForm from "../role/add-form";
 import UpdateForm from "./update-form";
-import memoryUtils from "../../utils/memoryUtils";
 import {formatDate} from "../../utils/dateUtils";
+import {connect} from 'react-redux'
+import {logout} from "../../redux/actions";
+
 /*
 * 角色路由
 * */
-export default class Role extends Component {
+class Role extends Component {
 
     constructor(props) {
         super(props);
@@ -97,13 +99,21 @@ export default class Role extends Component {
         // 得到最新的menus
         role.menus = this.auth.current.getMenus()
         role.auth_time = Date.now()
-        role.auth_name = memoryUtils.user.username
+        role.auth_name = this.props.user.username
         const result = await reqUpdateRole(role)
         if(result.status === 0){
-            message.success('更新角色成功')
-            this.setState({
-                roles:[...this.state.roles]
-            })
+
+            //如果当前恒信的是自己角色的权限，强制退出
+            if(role._id === this.props.user.role_id){
+                this.props.logout()
+                message.success('当前用户角色权限已修改，请重新登录')
+            }else{
+                message.success('更新角色成功')
+                this.setState({
+                    roles:[...this.state.roles]
+                })
+            }
+
         }else{
             message.error('更新角色成功')
         }
@@ -153,7 +163,13 @@ export default class Role extends Component {
                     columns={this.columns}
                     bordered
                     loading={loading}
-                    rowSelection={{type:'radio',selectedRowKeys:[role._id]}}
+                    rowSelection={{
+                        type:'radio',
+                        selectedRowKeys:[role._id],
+                        onSelect:role=>{
+                            this.setState({role})
+                        }
+                    }}
                     position={{
                         defaultPageSize:pageSize,
                         showQuickJumper:true,
@@ -191,3 +207,7 @@ export default class Role extends Component {
         )
     }
 }
+export default connect(
+    state=>({user:state.user}),
+    {logout}
+)(Role)
