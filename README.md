@@ -1,3 +1,5 @@
+
+
 # react学习
 
 ### 创建虚拟dom
@@ -348,54 +350,54 @@ PubSub.subscribe('search', (msg,searchName) => {
 			)('当前组件名')
 		```
 ### 路由
-	1. 下载包和引入包
-		```
-		npm install --save 'react-router-dom'
-		import {HashRouter,Switch,Route} from 'react-router-dom'
-		```
-	2. 使用
-		```
-		/*
-		HashRouter:hashHistory 使用 URL 中的 hash（#）部分去创建路由 简单来说就是url地址中会出现#,例如http://xxxx.com/#/
-		Switch：表示只显示一个路由组件
-		Route：参数path和component path为路由地址 component为组件名
-		*/
-		<HashRouter>
-			<Switch>
-				<Route path="/register" component={Register}/>
-				<Route path="/login" component={Login}/>
-				{/*默认路由*/}
-				<Route component={Main} />
-			</Switch>
-		</HashRouter>
-		```
+1. 下载包和引入包
+	```
+	npm install --save 'react-router-dom'
+	import {HashRouter,Switch,Route} from 'react-router-dom'
+	```
+2. 使用
+	```
+	/*
+	HashRouter:hashHistory 使用 URL 中的 hash（#）部分去创建路由 简单来说就是url地址中会出现#,例如http://xxxx.com/#/
+	Switch：表示只显示一个路由组件
+	Route：参数path和component path为路由地址 component为组件名
+	*/
+	<HashRouter>
+		<Switch>
+			<Route path="/register" component={Register}/>
+			<Route path="/login" component={Login}/>
+			{/*默认路由*/}
+			<Route component={Main} />
+		</Switch>
+	</HashRouter>
+	```
 
 ### setState
-	- 写法  setState(stateChange,[callback])
-		1. 函数：this.setState(state => ({count:state.count + 1})
-		2. 对象：this.setState({count:this.state.count + 1})
-		3. callback回调函数可选，如果需要在setState后获取最新的状态数据，在callback函数中读取
-		4. 对象方式是函数方式的简写方式，如果新状态不依赖原状态，使用对象方式，如果依赖，使用函数方式
-	- 异步还是同步
-		1. react相关回调（生命周期/react事件回调）：异步
-		2. 其他异步回调（定时器回调/原生事件监听回调/promise回调）：同步
-	- 多次调用
-		1. 对象方式：合并更新一次状态，只调用一次render()更新界面 ---状态更新和界面更新都合并了
-		2. 函数方式：更新多次状态，但只调用一次render()更新界面 ---状态更新没有合并，但界面更新合并了
+- 写法  setState(stateChange,[callback])
+	1. 函数：this.setState(state => ({count:state.count + 1})
+	2. 对象：this.setState({count:this.state.count + 1})
+	3. callback回调函数可选，如果需要在setState后获取最新的状态数据，在callback函数中读取
+	4. 对象方式是函数方式的简写方式，如果新状态不依赖原状态，使用对象方式，如果依赖，使用函数方式
+- 异步还是同步
+	1. react相关回调（生命周期/react事件回调）：异步
+	2. 其他异步回调（定时器回调/原生事件监听回调/promise回调）：同步
+- 多次调用
+	1. 对象方式：合并更新一次状态，只调用一次render()更新界面 ---状态更新和界面更新都合并了
+	2. 函数方式：更新多次状态，但只调用一次render()更新界面 ---状态更新没有合并，但界面更新合并了
 
 ### Component
-	- 存在的问题：
-		1. 父组件重新render(),当前组件也会重新执行render()，即使没有任何变化
-		2. 当前组件setState()，重新执行r ender(),即使state没有任何变化
-	- 解决
-		1. 原因：组件的componentShouldUpdate()默认返回true，即使数据没有变化render()都会重新执行
-		2. 方法一：重写shouldComponentUpdate()，判断如果数据有变化返回true，否则返回false
-		3. 办法二：使用PureComponent代替Component  React.Component ===>  React.PureComponent
-		4. 说明：一般都使用PureComponent来优化组件性能
-	- PureComponent的基本原理
-		1. 重写shouldComponentUpdate()
-		2. 对组件的新/旧state和props中的数据进行浅比较，如果都没有变化就返回false，否则就返回true
-		3. 一旦componentShouldUpdate()返回false，不再执行用于更新的render()
+- 存在的问题：
+	1. 父组件重新render(),当前组件也会重新执行render()，即使没有任何变化
+	2. 当前组件setState()，重新执行r ender(),即使state没有任何变化
+- 解决
+	1. 原因：组件的componentShouldUpdate()默认返回true，即使数据没有变化render()都会重新执行
+	2. 方法一：重写shouldComponentUpdate()，判断如果数据有变化返回true，否则返回false
+	3. 办法二：使用PureComponent代替Component  React.Component ===>  React.PureComponent
+	4. 说明：一般都使用PureComponent来优化组件性能
+- PureComponent的基本原理
+	1. 重写shouldComponentUpdate()
+	2. 对组件的新/旧state和props中的数据进行浅比较，如果都没有变化就返回false，否则就返回true
+	3. 一旦componentShouldUpdate()返回false，不再执行用于更新的render()
 
 ### antd
 1. 下载包
@@ -495,7 +497,7 @@ PubSub.subscribe('search', (msg,searchName) => {
 			```
 			
 			
-			
+	
 4. 3x迁移4x
 	1. 表单中，向父组件暴露form表单对象的方法（不看官方文档。。不看迁移的后果！！！！）
 		- 3x
@@ -519,32 +521,92 @@ PubSub.subscribe('search', (msg,searchName) => {
 
 
 ### 高阶函数和高阶组件
-	- 高阶函数
-		1. 一类特别的函数
-			1. 接受函数类型的参数
-			2. 返回值是函数
-		2. 常见
-			1. 定时器：setTimeout()/setInterval()
-			2. Promise：Promise(() => {}) then(value=>{},reason=>{})
-			3. 数组遍历相关的方法：forEach()/filter()/map()/reduce()/find()/findIndex()
-			4. 函数对象的bind()
-			5. Form.create()()/getFieldDecorator()()   //antd中被弃用
-		3。高阶函数更新动态，更加具有扩展性
-	- 高阶组件
-		1. 本质是一个函数
-		2. 接受一个组件（被包装组件），返回一个新的组件（包装组件），包装组件会向被包装组件传入特定属性
-		3. 作用：扩展组件的功能 
-		4. 高阶组件也是高阶函数：接收一个组件函数，返回时一个新的组件函数
-		
 
+- 高阶函数
+	1. 一类特别的函数
+		1. 接受函数类型的参数
+		2. 返回值是函数
+	2. 常见
+		1. 定时器：setTimeout()/setInterval()
+		2. Promise：Promise(() => {}) then(value=>{},reason=>{})
+		3. 数组遍历相关的方法：forEach()/filter()/map()/reduce()/find()/findIndex()
+		4. 函数对象的bind()
+		5. Form.create()()/getFieldDecorator()()   //antd中被弃用
+	3。高阶函数更新动态，更加具有扩展性
+- 高阶组件
+	1. 本质是一个函数
+	2. 接受一个组件（被包装组件），返回一个新的组件（包装组件），包装组件会向被包装组件传入特定属性
+	3. 作用：扩展组件的功能 
+	4. 高阶组件也是高阶函数：接收一个组件函数，返回时一个新的组件函数
 
+### Hooks
+- 简介
+    允许不适用class的情况下使用state以及其他的react特性
+- 引入方法
+    ```
+        import react,{useState,useEffect} from 'react
+    ```
+- useState
+    ```
+        /*
+            [状态名，修改方法] = useState([初始值])
+        */
+        const [state,setState] = useState('')
+    ```
+- useEffect
+    ```
+        /*
+        	useEffet(()=>{},[])
+        	代替class中的一些生命周期
+        	后面的[]为可选，对重复执行进行判断，若为[]，表示只在初始化时执行一次，若为[state],表示在仅在state发生变化的时候重新渲染
+        */
+        useEffet(()=>{
+        	//调用接口一步操作
+        },[])//初始化执行
+    ```
 
+- react-redux
 
+  1. react-redux 中提供了 useStore(),useSelector(),useDispatch() 三种钩子，不推荐使用useStore()
 
+  2. 比较
 
+     1. class模式
 
+        ```
+        // 需要使用高阶函数包裹 才能调用react-redux中的state和方法
+        export default connect(
+            state=>({comments:state.comments}),//state就是一个comments数组
+            {addComment,delComment,getComments}
+        )(App)
+        ```
 
+     2. 函数模式
 
+        ```
+        //直接使用方法引入，调用 useSelector 和 useDispatch 实现对react-redux中的state获取与修改
+        import {useDispatch, useSelector} from "react-redux";
+        ```
+
+  3. useSelector
+
+     ```
+     import {useSelector} from "react-redux";
+     // useSelector(state => state.xxx)
+     const comments = useSelector(state=>state.comments)
+     ```
+
+     
+
+  4. useDispatch
+
+     ```
+     import {useDispatch} from "react-redux";
+     const dispatch = useDispatch()
+     dispatch(xxx) //xxx可为action中的方法
+     ```
+
+     
 
 
 
