@@ -1,9 +1,10 @@
 import React from 'react'
 import './component-item.css'
 import {useDispatch} from "react-redux";
+import {delComment} from "../../redux/actions";
 
 function ComponentItem (props) {
-    const {comment,index,delComment} = props
+    const {comment,index} = props
     const dispatch = useDispatch()
     //删除当前评论
     function handleClick () {
