@@ -10,7 +10,7 @@ export const addComment = (comment) => ({type:ADD_COMMENT,data:comment})
 //删除
 export const delComment = (index) => ({type:DEL_COMMENT,data:index})
 //同步接收comments
-export const receiveComments = (comments) => ({type:RECEIVE_COMMENTS,data:comments})
+const receiveComments = (comments) => ({type:RECEIVE_COMMENTS,data:comments})
 //异步action(函数嵌套)
 export const getComments = (number) => {
     return dispatch => {

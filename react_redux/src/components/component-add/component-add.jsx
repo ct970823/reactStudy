@@ -1,59 +1,44 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-class ComponentAdd extends React.Component {
-    static propTypes = {
-        addComment:PropTypes.func.isRequired
-    }
+import React,{useState} from 'react'
+import {useDispatch} from "react-redux";
+import {addComment} from "../../redux/actions";
 
-    state = {
-        username:'',
-        content:''
-    }
 
-    //不需要bind直接使用箭头函数
-    handleSubmit = () => {
+function ComponentAdd () {
+    const [username,setUserName] = useState('')
+    const [content,setContent] = useState('')
+    const dispatch = useDispatch()
+    function handleSubmit () {
         //收集数据
-        const comment = this.state
-        //更新状态
-        this.props.addComment(comment)
+        const comment = {
+            username,
+            content
+        }
+        dispatch(addComment(comment))
         //清空数据
-        this.setState({
-            username:'',
-            content:''
-        })
+        setUserName('')
+        setContent('')
     }
-    //读取数据
-    handleUsernameChange = (event) => {
-        const username = event.target.value
-        this.setState({username})
-    }
-    handleContentChange = (event) => {
-        const content = event.target.value
-        this.setState({content})
-    }
-    render() {
-        const {username,content} = this.state
-        return (
 
-            <div className="col-md-4">
-                <form className="form-horizontal">
-                    <div className="form-group">
-                        <label>用户名</label>
-                        <input type="text" className="form-control" placeholder="用户名" value={username} onChange={this.handleUsernameChange}/>
+    return (
+        <div className="col-md-4">
+            <form className="form-horizontal">
+                <div className="form-group">
+                    <label>用户名</label>
+                    <input type="text" className="form-control" placeholder="用户名" value={username} onChange={(e)=>setUserName(e.target.value)}/>
+                </div>
+                <div className="form-group">
+                    <label>评论内容</label>
+                    <textarea className="form-control" rows="6" placeholder="评论内容" value={content} onChange={(e)=>setContent(e.target.value)}/>
+                </div>
+                <div className="form-group">
+                    <div className="col-sm-offset-2 col-sm-10">
+                        <button type="button" className="btn btn-default pull-right" onClick={handleSubmit}>提交</button>
                     </div>
-                    <div className="form-group">
-                        <label>评论内容</label>
-                        <textarea className="form-control" rows="6" placeholder="评论内容" value={content} onChange={this.handleContentChange}/>
-                    </div>
-                    <div className="form-group">
-                        <div className="col-sm-offset-2 col-sm-10">
-                            <button type="button" className="btn btn-default pull-right" onClick={this.handleSubmit}>提交</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        )
-    }
+                </div>
+            </form>
+        </div>
+    )
 }
+
 
 export default ComponentAdd
